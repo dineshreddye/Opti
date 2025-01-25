@@ -1,0 +1,26 @@
+.responsive-sidebar {
+  display: flex;
+  align-items: center;
+}
+
+.desktop-sidebar {
+  display: none;
+}
+
+/* Show sidebar only on larger screens */
+@media (min-width: 768px) {
+  .desktop-sidebar {
+    display: block;
+  }
+  .menu-toggle-btn {
+    display: none;
+  }
+}
+
+/* Mobile-specific styles */
+.menu-toggle-btn {
+  margin: 10px;
+}
+.mobile-drawer {
+  display: block;
+}

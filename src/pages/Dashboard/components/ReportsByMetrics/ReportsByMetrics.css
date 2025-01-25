@@ -1,0 +1,12 @@
+.revenue-card-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center; /* Align cards to the left */
+  gap: 16px; /* Space between cards */
+}
+
+@media (min-width: 768px) {
+  .revenue-card-container {
+    justify-content: flex-start;
+  }
+}

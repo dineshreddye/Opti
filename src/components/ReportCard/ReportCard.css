@@ -1,0 +1,29 @@
+.revenue-card {
+  width: 300px;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.revenue-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.revenue-card-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.revenue-card-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #000;
+}
+
+.revenue-card-chart {
+  height: 80px;
+  margin-top: 16px;
+}

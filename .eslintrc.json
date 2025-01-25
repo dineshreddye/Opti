@@ -1,0 +1,32 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "node": true
+  },
+  "extends": [
+    "airbnb",
+    "airbnb/hooks",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "parser": "@babel/eslint-parser", // Updated to use the new parser
+  "parserOptions": {
+    "ecmaVersion": 12,
+    "sourceType": "module",
+    "babelOptions": {
+      "presets": ["@babel/preset-react"]
+    }
+  },
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "react/react-in-jsx-scope": "off",
+    "react/jsx-filename-extension": [1, { "extensions": [".jsx", ".js"] }],
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "react/prop-types": "off",
+    "import/prefer-default-export": "off",
+    "react/forbid-prop-types": [0]
+  }
+}
