@@ -162,3 +162,83 @@ export const CAMPAIGNS_SOURCE_CONFIG = [
     render: (text) => `${Number(text).toFixed(2)}%`,
   },
 ];
+export const FEED_SOURCE_CONFIG = [
+  {
+    title: "Feed",
+    dataIndex: CAMPAIGN_KEYS.FEED,
+    key: CAMPAIGN_KEYS.FEED,
+  },
+  {
+    title: "Amount Spent",
+    dataIndex: CAMPAIGN_KEYS.AMOUNT_SPENT,
+    key: CAMPAIGN_KEYS.AMOUNT_SPENT,
+    render: (text) => `$${Number(text).toFixed(2)}`,
+  },
+  {
+    title: "Impressions",
+    dataIndex: CAMPAIGN_KEYS.IMPRESSIONS,
+    key: CAMPAIGN_KEYS.IMPRESSIONS,
+  },
+  {
+    title: "Link Clicks",
+    dataIndex: CAMPAIGN_KEYS.LINK_CLICKS,
+    key: CAMPAIGN_KEYS.LINK_CLICKS,
+  },
+  {
+    title: "Conversions",
+    dataIndex: CAMPAIGN_KEYS.CONVERSIONS,
+    key: CAMPAIGN_KEYS.CONVERSIONS,
+  },
+  {
+    title: "NET",
+    dataIndex: CAMPAIGN_KEYS.NET,
+    key: CAMPAIGN_KEYS.NET,
+    render: (text) => `$${Number(text).toFixed(2)}`,
+  },
+  {
+    title: "ROI",
+    dataIndex: CAMPAIGN_KEYS.ROI,
+    key: CAMPAIGN_KEYS.ROI,
+    render: (text) => `${Number(text).toFixed(2)}%`,
+  },
+];
+export const PARTNER_SOURCE_CONFIG = [
+  {
+    title: "Partner",
+    dataIndex: CAMPAIGN_KEYS.PARTNER,
+    key: CAMPAIGN_KEYS.PARTNER,
+  },
+  {
+    title: "Amount Spent",
+    dataIndex: CAMPAIGN_KEYS.AMOUNT_SPENT,
+    key: CAMPAIGN_KEYS.AMOUNT_SPENT,
+    render: (text) => `$${Number(text).toFixed(2)}`,
+  },
+  {
+    title: "Impressions",
+    dataIndex: CAMPAIGN_KEYS.IMPRESSIONS,
+    key: CAMPAIGN_KEYS.IMPRESSIONS,
+  },
+  {
+    title: "Link Clicks",
+    dataIndex: CAMPAIGN_KEYS.LINK_CLICKS,
+    key: CAMPAIGN_KEYS.LINK_CLICKS,
+  },
+  {
+    title: "Conversions",
+    dataIndex: CAMPAIGN_KEYS.CONVERSIONS,
+    key: CAMPAIGN_KEYS.CONVERSIONS,
+  },
+  {
+    title: "NET",
+    dataIndex: CAMPAIGN_KEYS.NET,
+    key: CAMPAIGN_KEYS.NET,
+    render: (text) => `$${Number(text).toFixed(2)}`,
+  },
+  {
+    title: "ROI",
+    dataIndex: CAMPAIGN_KEYS.ROI,
+    key: CAMPAIGN_KEYS.ROI,
+    render: (text) => `${Number(text).toFixed(2)}%`,
+  },
+];

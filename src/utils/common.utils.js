@@ -1,16 +1,38 @@
 import _filter from "lodash/filter";
 import _get from "lodash/get";
-import { CAMPAIGN_KEYS } from "../constants/common";
+import moment from "moment";
+import _map from "lodash/map";
+import _values from "lodash/values";
+import _find from "lodash/find";
+import _castArray from "lodash/castArray";
+import _compact from "lodash/compact";
+import {
+  FileTextOutlined,
+  HomeOutlined,
+  PoundOutlined,
+  SettingOutlined,
+  SoundOutlined,
+} from "@ant-design/icons";
+import {
+  CAMPAIGN_KEYS,
+  FEED,
+  FEED_OPTIONS,
+  PAGES,
+  PARTNER,
+  PARTY_KEYS,
+  PARTY_LABELS,
+  SIDEBAR_MENU_ITEMS,
+} from "../constants/common";
 
 export function filterByDateRange(data, from, to) {
   // Parse 'from' and 'to' dates into Date objects
-  const fromDate = new Date(from);
-  const toDate = new Date(to);
+  const fromDate = moment(from).valueOf();
+  const toDate = moment(to).valueOf();
 
   // Filter the data
   return data.filter((item) => {
-    const itemDate = new Date(item[CAMPAIGN_KEYS.DATE]);
-    return itemDate >= fromDate && itemDate <= toDate;
+    const itemDate = moment(item[CAMPAIGN_KEYS.DATE], "DD-MM-YYYY").valueOf();
+    return moment(itemDate).isBetween(fromDate, toDate);
   });
 }
 
@@ -111,4 +133,80 @@ export const getUndeletedCampaigns = (campaigns) => {
   return _filter(campaigns, (campaign) => {
     return _get(campaign, "isDeleted") !== true;
   });
+};
+
+export const getSubdomain = () => {
+  // Create a URL object
+
+  const parsedUrl = new URL(window.location.href);
+
+  // Get the hostname from the URL
+  const { hostname } = parsedUrl || {};
+
+  // Split the hostname into parts by '.'
+  const parts = hostname.split(".");
+
+  // If the hostname has more than two parts (i.e., subdomain exists)
+  if (parts.length > 2) {
+    // Return the first part (subdomain)
+    return parts[0];
+  }
+  return null; // No subdomain
+};
+
+const generateDashboardItems = () => {
+  return _map(_values(PARTY_KEYS), (partyKey) => ({
+    key: partyKey,
+    label: PARTY_LABELS[partyKey] || partyKey,
+    children: _map(_values(FEED), (feed) => ({
+      key: `${partyKey}_${feed}`,
+      label: feed,
+      children: _map(_values(PARTNER), (partner) => ({
+        key: `${partyKey}_${feed}_${partner}`,
+        label: partner,
+      })),
+    })),
+  }));
+};
+
+const getDashboardItems = (subdomain) => {
+  const options = generateDashboardItems();
+  const optionsForSubdomain = _find(options, (option) => {
+    return option.key === subdomain;
+  });
+  if (subdomain) return _castArray(optionsForSubdomain);
+  return options;
+};
+
+export const filterSidebarDataBySubdomain = (subdomain) => {
+  return _compact([
+    {
+      key: PAGES.DASHBOARD,
+      label: "Dashboard",
+      icon: <HomeOutlined />,
+      children: getDashboardItems(subdomain),
+    },
+    {
+      key: PAGES.CAMPAIGNS,
+      label: "Campaigns",
+      icon: <SoundOutlined />,
+    },
+    {
+      key: PAGES.REPORTS,
+      label: "Reports",
+      icon: <FileTextOutlined />,
+    },
+    !subdomain
+      ? {
+          key: PAGES.BILLING,
+          label: "Billings",
+          icon: <PoundOutlined />,
+        }
+      : null,
+    {
+      key: PAGES.SETTINGS,
+      label: "Settings",
+      icon: <SettingOutlined />,
+    },
+  ]);
 };

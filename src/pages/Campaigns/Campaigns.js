@@ -13,8 +13,20 @@ function Campaigns({ campaigns, openCreateCampaignModal }) {
 
   const filteredCampaigns = useMemo(() => {
     return campaigns.filter((campaign) => {
-      const { trafficSource = "", account = "", dateRange = [] } = filters;
-      const { trafficeSource: source, adAccount, date } = campaign;
+      const {
+        trafficSource = "",
+        account = "",
+        dateRange = [],
+        feed = "",
+        partner = "",
+      } = filters;
+      const {
+        trafficeSource: source,
+        adAccount,
+        date,
+        feed: campaignFeed,
+        partner: campaignPartner,
+      } = campaign;
       if (trafficSource) {
         if (source.toLowerCase() !== trafficSource.toLowerCase()) {
           return false;
@@ -23,6 +35,16 @@ function Campaigns({ campaigns, openCreateCampaignModal }) {
 
       if (account) {
         if (adAccount.toLowerCase() !== account.toLowerCase()) {
+          return false;
+        }
+      }
+      if (feed) {
+        if (campaignFeed.toLowerCase() !== feed.toLowerCase()) {
+          return false;
+        }
+      }
+      if (partner) {
+        if (campaignPartner.toLowerCase() !== partner.toLowerCase()) {
           return false;
         }
       }

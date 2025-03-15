@@ -10,7 +10,11 @@ const { Text } = Typography;
 function Filters({ data, onFilterChange }) {
   const [trafficSources, setTrafficSources] = useState([]);
   const [filteredAccounts, setFilteredAccounts] = useState([]);
+  const [feeds, setFeeds] = useState([]);
+  const [partners, setPartners] = useState([]);
   const [selectedTrafficSource, setSelectedTrafficSource] = useState("");
+  const [selectedFeed, setSelectedFeed] = useState("");
+  const [selectedpartner, setSelectedpartner] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState([]);
 
@@ -21,6 +25,36 @@ function Filters({ data, onFilterChange }) {
     ];
     setTrafficSources(uniqueTrafficSources);
   }, [data]);
+
+  useEffect(() => {
+    // Extract unique feed
+    const uniqueAccounts = data
+      .filter(
+        (item) =>
+          item[CAMPAIGN_KEYS.TRAFFIC_SOURCE] === selectedTrafficSource ||
+          item[CAMPAIGN_KEYS.ADACCOUNT] === selectedAccount ||
+          !selectedTrafficSource ||
+          !selectedAccount,
+      )
+      .map((item) => item[CAMPAIGN_KEYS.FEED]);
+    setFeeds([...new Set(uniqueAccounts)]);
+  }, [data, selectedAccount, selectedTrafficSource]);
+
+  useEffect(() => {
+    // Extract unique partner
+    const uniquePartner = data
+      .filter(
+        (item) =>
+          item[CAMPAIGN_KEYS.TRAFFIC_SOURCE] === selectedTrafficSource ||
+          item[CAMPAIGN_KEYS.ADACCOUNT] === selectedAccount ||
+          item[CAMPAIGN_KEYS.FEED] === selectedFeed ||
+          !selectedTrafficSource ||
+          !selectedAccount ||
+          !selectedFeed,
+      )
+      .map((item) => item[CAMPAIGN_KEYS.PARTNER]);
+    setPartners([...new Set(uniquePartner)]);
+  }, [data, selectedAccount, selectedFeed, selectedTrafficSource]);
 
   useEffect(() => {
     // Extract unique accounts when data or traffic source changes
@@ -34,9 +68,9 @@ function Filters({ data, onFilterChange }) {
     setFilteredAccounts([...new Set(uniqueAccounts)]);
   }, [data, selectedTrafficSource]);
 
-  const notifyParent = (trafficSource, account, dateRange) => {
+  const notifyParent = (trafficSource, account, feed, partner, dateRange) => {
     if (onFilterChange) {
-      onFilterChange({ trafficSource, account, dateRange });
+      onFilterChange({ trafficSource, account, feed, partner, dateRange });
     }
   };
 
@@ -48,12 +82,38 @@ function Filters({ data, onFilterChange }) {
         .filter((item) => item[CAMPAIGN_KEYS.TRAFFIC_SOURCE] === value)
         .map((item) => item[CAMPAIGN_KEYS.ADACCOUNT]),
     );
-    notifyParent(value, "", selectedDateRange);
+    notifyParent(value, "", selectedFeed, selectedpartner, selectedDateRange);
   };
 
   const handleAccountChange = (value) => {
     setSelectedAccount(value);
-    notifyParent(selectedTrafficSource, value, selectedDateRange);
+    notifyParent(
+      selectedTrafficSource,
+      value,
+      selectedFeed,
+      selectedpartner,
+      selectedDateRange,
+    );
+  };
+  const handleFeedChange = (value) => {
+    setSelectedFeed(value);
+    notifyParent(
+      selectedTrafficSource,
+      selectedAccount,
+      value,
+      selectedpartner,
+      selectedDateRange,
+    );
+  };
+  const handlePartnerChange = (value) => {
+    setSelectedpartner(value);
+    notifyParent(
+      selectedTrafficSource,
+      selectedAccount,
+      selectedFeed,
+      value,
+      selectedDateRange,
+    );
   };
 
   const handleDateRangeChange = (_, dateStrings) => {
@@ -95,6 +155,38 @@ function Filters({ data, onFilterChange }) {
           disabled={!selectedTrafficSource} // Disable if no traffic source selected
         >
           {filteredAccounts.map((account) => (
+            <Option key={account} value={account}>
+              {account}
+            </Option>
+          ))}
+        </Select>
+      </Col>
+      <Col xs={24} sm={12} md={6}>
+        <Text>Feed</Text>
+        <Select
+          placeholder="Select Feed"
+          style={{ width: "100%" }}
+          value={selectedFeed || undefined}
+          onChange={handleFeedChange}
+          disabled={!selectedTrafficSource} // Disable if no traffic source selected
+        >
+          {feeds.map((account) => (
+            <Option key={account} value={account}>
+              {account}
+            </Option>
+          ))}
+        </Select>
+      </Col>
+      <Col xs={24} sm={12} md={6}>
+        <Text>Partner</Text>
+        <Select
+          placeholder="Select Partner"
+          style={{ width: "100%" }}
+          value={selectedpartner || undefined}
+          onChange={handlePartnerChange}
+          disabled={!selectedTrafficSource} // Disable if no traffic source selected
+        >
+          {partners.map((account) => (
             <Option key={account} value={account}>
               {account}
             </Option>

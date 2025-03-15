@@ -1,16 +1,18 @@
+import { CAMPAIGN_KEYS } from "../../constants/common";
+
 function parseObject(obj) {
   // Destructure required fields and return the transformed object
   const { date, amountSpent, net, roi, linkClicks } = obj;
-
-  const splitDates = date.split("/");
-  const formattedDate = `${splitDates[1]}-${splitDates[0]}-${splitDates[2]}`;
+  // console.log({ date });
+  // const splitDates = date.split("-");
+  // const formattedDate = `${splitDates[1]}-${splitDates[0]}-${splitDates[2]}`;
 
   return {
-    Date: formattedDate,
-    "Amount Spent": Number(amountSpent) || 0,
-    NET: Number(net) || 0,
-    ROI: Number(roi) || 0,
-    "Link Clicks": Number(linkClicks) || 0,
+    [CAMPAIGN_KEYS.DATE]: date,
+    [CAMPAIGN_KEYS.AMOUNT_SPENT]: Number(amountSpent) || 0,
+    [CAMPAIGN_KEYS.NET]: Number(net) || 0,
+    [CAMPAIGN_KEYS.ROI]: Number(roi) || 0,
+    [CAMPAIGN_KEYS.LINK_CLICKS]: Number(linkClicks) || 0,
   };
 }
 
@@ -26,7 +28,7 @@ function sortByDate(list, dateKey) {
 }
 
 export function parseDataForConsolidatedGraph(data) {
-  const parsedData = sortByDate(data.map(parseObject), "Date");
+  const parsedData = sortByDate(data.map(parseObject), CAMPAIGN_KEYS.DATE);
 
   const ret = [];
   if (parsedData.length > 0) {

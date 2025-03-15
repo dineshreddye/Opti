@@ -7,6 +7,8 @@ import {
   AD_ACCOUNT_SOURCE_CONFIG,
   AD_SOURCE_CONFIG,
   CAMPAIGNS_SOURCE_CONFIG,
+  FEED_SOURCE_CONFIG,
+  PARTNER_SOURCE_CONFIG,
   TRAFFIC_SOURCE_CONFIG,
 } from "./Reports.config";
 import { CAMPAIGN_KEYS } from "../../constants/common";
@@ -46,6 +48,20 @@ function Reports({ campaigns }) {
             data={campaigns}
             columns={AD_SOURCE_CONFIG}
             keyName={CAMPAIGN_KEYS.ADNAME}
+          />
+        )}
+        {activeTab === CAMPAIGN_KEYS.FEED && (
+          <TrafficSourceTable
+            data={campaigns}
+            columns={FEED_SOURCE_CONFIG}
+            keyName={CAMPAIGN_KEYS.FEED}
+          />
+        )}
+        {activeTab === CAMPAIGN_KEYS.PARTNER && (
+          <TrafficSourceTable
+            data={campaigns}
+            columns={PARTNER_SOURCE_CONFIG}
+            keyName={CAMPAIGN_KEYS.PARTNER}
           />
         )}
       </div>

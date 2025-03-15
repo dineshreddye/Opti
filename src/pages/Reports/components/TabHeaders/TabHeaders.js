@@ -33,6 +33,8 @@ function TabHeaders({ activeTab, setActiveTab }) {
         <TabPane tab="Ad Accounts" key={CAMPAIGN_KEYS.ADACCOUNT} />
         <TabPane tab="Campaigns" key={CAMPAIGN_KEYS.CAMPAIGN_NAME} />
         <TabPane tab="Ads" key={CAMPAIGN_KEYS.ADNAME} />
+        <TabPane tab="Feed" key={CAMPAIGN_KEYS.FEED} />
+        <TabPane tab="Partner" key={CAMPAIGN_KEYS.PARTNER} />
       </Tabs>
     </div>
   );

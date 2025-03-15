@@ -6,7 +6,7 @@ import Icon from "@ant-design/icons";
 function IconLabel({ icon, label }) {
   return (
     <Space>
-      <Icon component={icon} />
+      {icon ? <Icon component={icon} /> : null}
       <span>{label}</span>
     </Space>
   );

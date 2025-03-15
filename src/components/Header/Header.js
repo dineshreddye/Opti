@@ -1,18 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Layout, Avatar, Popover, Button } from "antd";
 import { UserOutlined, LogoutOutlined } from "@ant-design/icons";
-import { signOut } from "firebase/auth";
 
-import auth from "../../firebaseAuth";
+import AuthContext from "../../contexts/AuthContext";
 
 const { Header } = Layout;
 
 function AppHeader() {
   const [popoverVisible, setPopoverVisible] = useState(false);
+  const { signOutUser } = useContext(AuthContext);
 
   const handleLogout = async () => {
-    await signOut(auth);
-    console.log("Logged out"); // Replace with your logout logic
+    signOutUser();
   };
 
   const content = (

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Table, Button, Space, Switch, Empty } from "antd";
 
 import Status from "./components/Status";
@@ -43,7 +43,7 @@ const columns = [
   },
 ];
 
-function CampaignsTable({ data, openCreateCampaignModal }) {
+function CampaignsTable({ data, openCreateCampaignModal, subDomain }) {
   const {
     tableData,
     handleRowSelection,
@@ -62,24 +62,39 @@ function CampaignsTable({ data, openCreateCampaignModal }) {
     ],
   };
 
-  const enhancedColumns = [
-    {
-      title: "Actions",
-      key: "toggle",
-      render: (_, record) => (
-        <Switch
-          checked={record.toggle}
-          onChange={() => handleToggle(record.key)}
-        />
-      ),
-    },
-    {
-      title: "Status",
-      key: "Status",
-      render: (_, record) => <Status status={record.Status} />,
-    },
-    ...columns,
-  ];
+  const enhancedColumns = useMemo(
+    () => [
+      {
+        title: "Actions",
+        key: "toggle",
+        render: (_, record) => (
+          <Switch
+            checked={record.toggle}
+            onChange={() => handleToggle(record.key)}
+          />
+        ),
+      },
+      {
+        title: "Status",
+        key: "Status",
+        render: (_, record) => <Status status={record.Status} />,
+      },
+      ...columns,
+    ],
+    [handleToggle],
+  );
+
+  const dataColumns = useMemo(() => {
+    if (subDomain) return enhancedColumns;
+    return [
+      ...enhancedColumns,
+      {
+        title: "Id",
+        dataIndex: "id",
+        key: "id",
+      },
+    ];
+  }, [enhancedColumns, subDomain]);
 
   return (
     <div>
@@ -98,7 +113,7 @@ function CampaignsTable({ data, openCreateCampaignModal }) {
           type: "checkbox",
           ...rowSelection,
         }}
-        columns={enhancedColumns}
+        columns={dataColumns}
         dataSource={tableData}
         pagination={{
           pageSizeOptions: [10, 20, 50, 100].map(String), // Convert sizes to strings for Ant Design

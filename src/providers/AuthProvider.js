@@ -1,32 +1,67 @@
 import React, { useEffect, useMemo, useState } from "react";
 import _get from "lodash/get";
 import { message } from "antd";
+import { toast } from "react-toastify";
+
 import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
   sendPasswordResetEmail,
+  createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { get, ref } from "firebase/database";
+
+import { getFunctions, httpsCallable } from "firebase/functions";
+
 import AuthContext from "../contexts/AuthContext";
 
 import { STATUS } from "../constants/common";
 import { database, firebaseAuth } from "../configs/firebaseConfig";
+import { getSubdomain } from "../utils/common.utils";
+
+const functions = getFunctions();
+const createUser = httpsCallable(functions, "createUser");
 
 function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
+
+  const signOutUser = async () => {
+    setUser(null);
+    await firebaseSignOut(firebaseAuth);
+  };
+
+  const checkForUserExists = async (userInfo) => {
+    const userDetailsRef = ref(database, `users/${userInfo.uid}`);
+    const userDetails = await get(userDetailsRef);
+    if (userDetails.exists()) {
+      return {
+        status: STATUS.SUCCESS,
+        data: { ...userInfo, ...userDetails.val() },
+      };
+    }
+
+    return { status: STATUS.FAILED };
+  };
+
+  const canUserSignIn = async (userInfo) => {
+    if (!_get(userInfo, "party")) {
+      return _get(userInfo, "isAdmin");
+    }
+    return getSubdomain() === _get(userInfo, "party");
+  };
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(
       firebaseAuth,
       async (loggedInUser) => {
-        const userName = loggedInUser.email.split("@")[0];
-        const userDetailsRef = ref(database, `users/${userName}`);
-        const userDetails = await get(userDetailsRef);
-        if (userDetails.exists()) {
-          setUser({ ...loggedInUser, ...userDetails.val() });
-        } else {
-          setUser(loggedInUser);
+        if (loggedInUser) {
+          const { status, data } = await checkForUserExists(loggedInUser);
+          if (status === STATUS.SUCCESS) {
+            setUser(data);
+            return;
+          }
+          signOutUser();
         }
       },
     );
@@ -36,21 +71,34 @@ function AuthProvider({ children }) {
 
   const loginUser = async (email, password) => {
     try {
-      await signInWithEmailAndPassword(firebaseAuth, email, password);
-      // setUser(user)
+      const userDetails = await signInWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password,
+      );
+      // const isAdminUser =
+      const { status, data } = await checkForUserExists(userDetails.user);
+
+      if (status === STATUS.SUCCESS && canUserSignIn(data)) {
+        setUser(data);
+        return {
+          status: STATUS.SUCCESS,
+          msg: "Login Successful",
+        };
+      }
+      signOutUser();
       return {
-        status: STATUS.SUCCESS,
+        status: STATUS.FAILED,
+        msg: "Invalid User. Please try again",
       };
+      // setUser(user)
     } catch (error) {
-      console.log({ error });
       if (_get(error, "code") === "auth/user-not-found") {
-        message.error("No user found with email. Please signup.");
         return {
           status: STATUS.FAILED,
           msg: "No user found with email. Please signup.",
         };
       }
-      message.error(error.message);
       return {
         status: STATUS.FAILED,
         msg: "Something went wrong. Please try again.",
@@ -58,22 +106,20 @@ function AuthProvider({ children }) {
     }
   };
 
-  // const signupUser = async (email, password) => {
-  //   try {
-  //     const auth = getAuth();
-  //     const user = await createUserWithEmailAndPassword(
-  //       firebaseAuth,
-  //       email,
-  //       password
-  //     );
-  //     console.log({ user });
-  //     getUserFromuid(user);
-  //     setUser(user);
-  //     return user;
-  //   } catch {
-  //     return null;
-  //   }
-  // };
+  const signupUser = async (email, password) => {
+    try {
+      const newuser = await createUserWithEmailAndPassword(
+        firebaseAuth,
+        email,
+        password,
+      );
+      createUser(newuser.user.uid);
+      setUser(user);
+      return user;
+    } catch {
+      return null;
+    }
+  };
 
   // const getUserFromuid = (user) => {
   //   console.log({ user });
@@ -87,19 +133,15 @@ function AuthProvider({ children }) {
   //       setUser({});
   //     }
   //   });
-  //   // database
-  //   //   .object("/users/" + user.uid)
-  //   //   .valueChanges()
-  //   //   .get(value => {
-  //   //     if (value != null) {
-  //   //       setUser(value)
-  //   //     }
-  //   //   })
+  // database
+  //   .object("/users/" + user.uid)
+  //   .valueChanges()
+  //   .get(value => {
+  //     if (value != null) {
+  //       setUser(value)
+  //     }
+  //   })
   // };
-
-  const signOutUser = async () => {
-    await firebaseSignOut(firebaseAuth);
-  };
 
   const sendResetPasswordMail = async (email) => {
     try {
@@ -109,7 +151,6 @@ function AuthProvider({ children }) {
         msg: "Email sent successfully to reset your password",
       };
     } catch (error) {
-      console.log({ error });
       let msg = "Error sending email.";
 
       if (_get(error, "code") === "auth/user-not-found") {
@@ -122,15 +163,31 @@ function AuthProvider({ children }) {
     }
   };
 
-  console.log({ user });
+  async function createNewUser({ email, password, name, party }) {
+    const userData = {
+      email,
+      password,
+      name,
+      party,
+    };
+
+    try {
+      await createUser(userData);
+      toast("User added successfully.");
+    } catch (error) {
+      toast("Error creating user");
+      console.error("Error creating user:", error);
+    }
+  }
 
   const value = useMemo(() => {
     return {
       user,
       loginUser,
-      // signupUser,
+      signupUser,
       signOutUser,
       sendResetPasswordMail,
+      createNewUser,
     };
   }, [user]);
 

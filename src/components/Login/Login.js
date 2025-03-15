@@ -2,6 +2,7 @@ import React, { useContext, useState } from "react";
 import { Form, Input, Button, message } from "antd";
 
 import AuthContext from "../../contexts/AuthContext";
+import { STATUS } from "../../constants/common";
 
 function Login() {
   const { loginUser } = useContext(AuthContext);
@@ -12,8 +13,12 @@ function Login() {
     setLoading(true);
 
     try {
-      loginUser(email, password);
-      message.success("Login successful!");
+      const { status, msg } = await loginUser(email, password);
+      if (status === STATUS.SUCCESS) {
+        message.success(msg);
+        return;
+      }
+      message.error(msg);
     } catch (error) {
       message.error(error.message);
     } finally {

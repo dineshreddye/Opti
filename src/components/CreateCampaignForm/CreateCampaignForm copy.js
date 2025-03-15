@@ -1,11 +1,9 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { Modal, Input, Select, Upload, Button, Switch } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { createCampaign } from "../../utils/firebase.utils";
-import { PARTY_OPTIONS } from "../../constants/common";
 
 const { Option } = Select;
 
@@ -213,7 +211,7 @@ const trafficSources = {
   Search: ["Google", "Bing"],
 };
 
-function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
+function CreateCampaignForm({ modalVisible, onClose }) {
   const [formData, setFormData] = useState({});
   const [currentStep, setCurrentStep] = useState(0);
 
@@ -229,7 +227,7 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
               <div
                 key={option}
                 className={`w-40 h-16 flex items-center justify-center cursor-pointer rounded-lg border-2 ${
-                  formData.feedSelection === option
+                  formData.objective === option
                     ? "bg-blue-500 text-white"
                     : "bg-white"
                 }`}
@@ -256,7 +254,7 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
               <div
                 key={option}
                 className={`w-40 h-16 flex items-center justify-center cursor-pointer rounded-lg border-2 ${
-                  formData.partner === option
+                  formData.objective === option
                     ? "bg-blue-500 text-white"
                     : "bg-white"
                 }`}
@@ -404,16 +402,16 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
                 setFormData({ ...formData, adName: e.target.value })
               }
             />
-          </div>
-          <div className="mt-4">
-            <Switch
-              checked={formData.createVariations || false}
-              onChange={(checked) =>
-                setFormData({ ...formData, createVariations: checked })
-              }
-              style={{ marginLeft: "8px" }}
-            />
-            <span className="ml-2">Create Variations</span>
+            <div className="mt-4">
+              <Switch
+                checked={formData.createVariations || false}
+                onChange={(checked) =>
+                  setFormData({ ...formData, createVariations: checked })
+                }
+                style={{ marginLeft: "8px" }}
+              />
+              <span className="ml-2">Create Variations</span>
+            </div>
           </div>
         </>
       ),
@@ -596,47 +594,12 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
           </div>
         </>
       ),
-      isValid: () => true,
     },
   ];
 
-  const uiSteps = useMemo(() => {
-    if (subDomain) return steps;
-    return [
-      ...steps,
-      {
-        name: "party",
-        condition: true,
-        component: (
-          <>
-            <div className="font-bold text-lg mb-2">Party</div>
-            <div className="flex justify-center space-x-4">
-              {PARTY_OPTIONS.map((option) => (
-                <div
-                  key={option.key}
-                  className={`w-40 h-16 flex items-center justify-center cursor-pointer rounded-lg border-2 ${
-                    formData.party === option.key
-                      ? "bg-blue-500 text-white"
-                      : "bg-white"
-                  }`}
-                  onClick={() =>
-                    setFormData({ ...formData, party: option.key })
-                  }
-                >
-                  {option.label}
-                </div>
-              ))}
-            </div>
-          </>
-        ),
-        isValid: () => !!formData.party,
-      },
-    ];
-  }, [formData, steps, subDomain]);
-
   const handleNext = () => {
-    if (currentStep < uiSteps.length - 1) {
-      if (currentStep === 12 && formData.adSetting === "AI Optimised") {
+    if (currentStep < steps.length - 1) {
+      if (currentStep === 10 && formData.adSetting === "AI Optimised") {
         setCurrentStep(currentStep + 2);
       } else {
         setCurrentStep(currentStep + 1);
@@ -646,7 +609,7 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
 
   const handlePrevious = () => {
     if (currentStep > 0) {
-      if (currentStep === 14 && formData.adSetting === "AI Optimised") {
+      if (currentStep === 12 && formData.adSetting === "AI Optimised") {
         setCurrentStep(currentStep - 2);
       } else {
         setCurrentStep(currentStep - 1);
@@ -655,15 +618,8 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
   };
 
   const handleSubmit = () => {
-    createCampaign(formData, subDomain);
-    setFormData({});
-    setCurrentStep(0);
-    onClose();
+    // console.log("Form Data:", formData);
   };
-
-  // const showSubmit = useMemo(() => {
-  //   if(subDomain)
-  // }, [])
 
   return (
     <Modal
@@ -675,13 +631,13 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
     >
       <div className="p-6">
         <div>
-          {uiSteps[currentStep].condition && uiSteps[currentStep].component}
+          {steps[currentStep].condition && steps[currentStep].component}
         </div>
         <div className="flex justify-between mt-6">
           <Button onClick={handlePrevious} disabled={currentStep === 0}>
             Previous
           </Button>
-          {currentStep === uiSteps.length - 1 ? (
+          {currentStep === steps.length - 1 ? (
             <Button type="primary" onClick={handleSubmit}>
               Submit
             </Button>
@@ -689,7 +645,7 @@ function CreateCampaignForm({ modalVisible, onClose, subDomain }) {
             <Button
               type="primary"
               onClick={handleNext}
-              disabled={!uiSteps[currentStep].isValid()}
+              disabled={!steps[currentStep].isValid()}
             >
               Next
             </Button>

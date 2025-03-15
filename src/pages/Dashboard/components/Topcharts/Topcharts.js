@@ -62,8 +62,6 @@ function Topcharts({ data }) {
 
   const { trafficSourceData, performanceByAdAccount } = topchartsData;
 
-  console.log({ trafficSourceData });
-
   return (
     <div className="mt-16">
       <div className="flex items-start justify-between">

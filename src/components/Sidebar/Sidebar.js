@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-
+import React, { useMemo, useState } from "react";
+import _values from "lodash/values";
+import _head from "lodash/head";
 import { Drawer, Menu, Layout } from "antd";
 import { MenuOutlined } from "@ant-design/icons";
 
@@ -9,7 +10,7 @@ import "./Sidebar.css"; // CSS for styling
 
 const { Sider } = Layout;
 
-function Sidebar({ menuItems, onMenuSelection, selectedMenuItem }) {
+function Sidebar({ menuItems, onMenuSelection, selectedMenuItem, subDomain }) {
   const [visible, setVisible] = useState(false);
 
   // Toggle Drawer visibility
@@ -18,25 +19,24 @@ function Sidebar({ menuItems, onMenuSelection, selectedMenuItem }) {
   };
 
   return (
-    <div className="responsive-sidebar">
+    <div style={{ height: "100%", overflow: "scroll", flexShrink: 0 }}>
       {/* Sidebar for Desktop/Tablet */}
-      <Sider breakpoint="lg" collapsedWidth="0" className="desktop-sidebar">
+      <Sider
+        breakpoint="lg"
+        collapsedWidth="0"
+        className="desktop-sidebar"
+        style={{ width: "200px !important" }}
+      >
         <Menu
           mode="inline"
           selectedkeys={selectedMenuItem}
           onSelect={(item) => {
-            onMenuSelection(item.key);
+            onMenuSelection(item);
           }}
-          defaultSelectedKeys={["1"]}
-        >
-          {menuItems.map((item) => {
-            return (
-              <Menu.Item key={item.key}>
-                <IconLabel icon={item.icon} label={item.label} />
-              </Menu.Item>
-            );
-          })}
-        </Menu>
+          defaultSelectedKeys={selectedMenuItem}
+          defaultOpenKeys={selectedMenuItem}
+          items={menuItems}
+        />
       </Sider>
 
       {/* Drawer for Mobile */}
@@ -56,18 +56,12 @@ function Sidebar({ menuItems, onMenuSelection, selectedMenuItem }) {
           mode="inline"
           selectedkeys={selectedMenuItem}
           onSelect={(item) => {
-            onMenuSelection(item.key);
+            onMenuSelection(item);
           }}
-          defaultSelectedKeys={["1"]}
-        >
-          {menuItems.map((item) => {
-            return (
-              <Menu.Item key={item.key}>
-                <IconLabel icon={item.icon} label={item.label} />
-              </Menu.Item>
-            );
-          })}
-        </Menu>
+          defaultSelectedKeys={selectedMenuItem}
+          defaultOpenKeys={selectedMenuItem}
+          items={menuItems}
+        />
       </Drawer>
     </div>
   );
