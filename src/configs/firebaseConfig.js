@@ -18,13 +18,22 @@ const firebaseConfig = {
   // messagingSenderId: "1089994553523",
   // appId: "1:1089994553523:web:307819a45913e991a258c6",
 
-  apiKey: "AIzaSyCIusebwW6ZLXhj1IbHdRDkpQzFgen8q8E",
-  authDomain: "optimizer-9ac06.firebaseapp.com",
-  projectId: "optimizer-9ac06",
-  storageBucket: "optimizer-9ac06.firebasestorage.app",
-  messagingSenderId: "380106057989",
-  appId: "1:380106057989:web:29b253695d99e59d87ef6c",
-  databaseURL: "https://optimizer-9ac06-default-rtdb.firebaseio.com",
+  // apiKey: "AIzaSyCIusebwW6ZLXhj1IbHdRDkpQzFgen8q8E",
+  // authDomain: "optimizer-9ac06.firebaseapp.com",
+  // projectId: "optimizer-9ac06",
+  // storageBucket: "optimizer-9ac06.firebasestorage.app",
+  // messagingSenderId: "380106057989",
+  // appId: "1:380106057989:web:29b253695d99e59d87ef6c",
+  // databaseURL: "https://optimizer-9ac06-default-rtdb.firebaseio.com",
+
+  apiKey: "AIzaSyCfyIwSIUsOKpob6UNDthJ8tQjmepZio3s",
+  authDomain: "aiadtrack.firebaseapp.com",
+  projectId: "aiadtrack",
+  storageBucket: "aiadtrack.firebasestorage.app",
+  messagingSenderId: "137212902942",
+  appId: "1:137212902942:web:04fbddef63ad5f0d26f80f",
+  measurementId: "G-R6PDXNHQ1S",
+  databaseURL: "https://aiadtrack-default-rtdb.firebaseio.com",
 };
 
 // Initialize Firebase

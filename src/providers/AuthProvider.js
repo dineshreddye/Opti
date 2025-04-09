@@ -44,7 +44,8 @@ function AuthProvider({ children }) {
     return { status: STATUS.FAILED };
   };
 
-  const canUserSignIn = async (userInfo) => {
+  const canUserSignIn = (userInfo) => {
+    // return true;
     if (!_get(userInfo, "party")) {
       return _get(userInfo, "isAdmin");
     }
@@ -79,6 +80,7 @@ function AuthProvider({ children }) {
       // const isAdminUser =
       const { status, data } = await checkForUserExists(userDetails.user);
 
+      console.log({ canUserSignIn: canUserSignIn(data) });
       if (status === STATUS.SUCCESS && canUserSignIn(data)) {
         setUser(data);
         return {

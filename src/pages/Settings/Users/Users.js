@@ -3,7 +3,7 @@ import _sortBy from "lodash/sortBy";
 import _values from "lodash/values";
 import _reverse from "lodash/reverse";
 import { Table, Button, Modal, Form, Input, Space } from "antd";
-import { onValue, query, ref } from "firebase/database";
+import { equalTo, onValue, orderByChild, query, ref } from "firebase/database";
 import AuthContext from "../../../contexts/AuthContext";
 import { database } from "../../../configs/firebaseConfig";
 
@@ -18,7 +18,11 @@ function Users({ subDomain }) {
   // Fetch users when component loads
 
   useEffect(() => {
-    const userRef = query(ref(database, "users"));
+    const userRef = query(
+      ref(database, "users"),
+      orderByChild("party"),
+      equalTo(subDomain),
+    );
     const unsubscribe = onValue(userRef, (snapshot) => {
       const campaignsResponse = snapshot.val();
       setUsers(_reverse(_sortBy(_values(campaignsResponse), "createdAt")));
@@ -85,8 +89,6 @@ function Users({ subDomain }) {
     //   ),
     // },
   ];
-
-  console.log({ users });
 
   return (
     <div>

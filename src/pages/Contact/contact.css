@@ -1,0 +1,61 @@
+/* Global Styles */
+/* .container {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+} */
+
+h1, h2 {
+  color: #333;
+}
+
+
+.pageHeading {
+  font-size: 2rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+
+.heading {
+  font-size: 1.6rem;
+  font-weight: 600;
+}
+
+p {
+  color: #555;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  background: white;
+  margin-top: 2rem;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.contact-box {
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 5px;
+}
+
+.sales {
+  background-color: #eef2ff;
+}
+
+.support {
+  background-color: #fff4d6;
+}
+
+.contact-box a {
+  color: #1e90ff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.contact-box a:hover {
+  color: #ff9800;
+}

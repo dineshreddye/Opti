@@ -33,6 +33,9 @@ import {
   SIDEBAR_MENU_ITEMS,
 } from "./constants/common";
 import Billing from "./pages/Billing";
+import Home from "./pages/home";
+import Contact from "./pages/Contact";
+
 // import { createCampaign } from "./utils/firebase.utils";
 // import { createCampaign } from "./utils/firebase.utils";
 
@@ -55,44 +58,13 @@ import Billing from "./pages/Billing";
 
 function App() {
   const { user } = useContext(AuthContext);
-  const [selectedMenuItem, setSelectedMenuItems] = useState(() => {
-    const subDomainKey = getSubdomain() || _head(_values(PARTY_KEYS));
-    return [
-      PAGES.DASHBOARD,
-      subDomainKey,
-      `${subDomainKey}_${FEED.GOOGLE}`,
-      `${subDomainKey}_${FEED.GOOGLE}_${PARTNER.CLICKSCO}`,
-    ];
-  });
+  const [page, setPage] = useState("HOME");
+  const [selectedMenuItem, setSelectedMenuItems] = useState([PAGES.DASHBOARD]);
   // const [stateOpenKeys] = useState([PAGES.DASHBOARD, FEED.GOOGLE]);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showCreateCampaignModal, setShowCreateCampaignModal] = useState(false);
   const [subDomain, setSubDomain] = useState(getSubdomain());
-
-  // useEffect(() => {
-  //   // setSubDomain("m4m");
-  //   setSubDomain(getSubdomain());
-
-  //   const subDomainKey = getSubdomain() || _head(_values(PARTY_KEYS));
-  //   setSelectedMenuItems([
-  //     PAGES.DASHBOARD,
-  //     subDomainKey,
-  //     `${subDomainKey}_${FEED.GOOGLE}`,
-  //     `${subDomainKey}_${FEED.GOOGLE}_${PARTNER.CLICKSCO}`,
-  //   ]);
-  // }, []);
-
-  // useEffect(() => {
-  //   const unsubscribe = onAuthStateChanged(auth, (user) => {
-  //     if (user) {
-  //       setIsAuthenticated(true);
-  //     } else {
-  //       setIsAuthenticated(false);
-  //     }
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
 
   useEffect(() => {
     let unsubscribe = () => {};
@@ -146,7 +118,21 @@ function App() {
   }, [subDomain]);
 
   if (!user) {
-    return <Login subDomain={subDomain} />;
+    if (page === "HOME") {
+      return (
+        <Home
+          onLoginPress={() => setPage("LOGIN")}
+          onSignupPress={() => setPage("CONTACT")}
+        />
+      );
+    }
+
+    if (page === "CONTACT") {
+      return <Contact />;
+    }
+    if (page === "LOGIN") {
+      return <Login />;
+    }
   }
 
   const onOpenChange = (openKeys) => {

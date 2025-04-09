@@ -67,6 +67,7 @@ export function groupAndSortWithSumByKeyName(data, keyName) {
   // Group data by the specified key and calculate sums
   const groupedData = data.reduce((acc, item) => {
     const groupKey = item[keyName] || "Undefined"; // Handle undefined keys
+    // console.log({ keyName, data, groupKey });
     if (!acc[groupKey]) {
       acc[groupKey] = { count: 0 };
     }

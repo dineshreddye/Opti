@@ -25,7 +25,11 @@ function Sidebar({ menuItems, onMenuSelection, selectedMenuItem, subDomain }) {
         breakpoint="lg"
         collapsedWidth="0"
         className="desktop-sidebar"
-        style={{ width: "200px !important" }}
+        style={{
+          width: "200px !important",
+          height: "100%",
+          backgroundColor: "white",
+        }}
       >
         <Menu
           mode="inline"
@@ -34,8 +38,9 @@ function Sidebar({ menuItems, onMenuSelection, selectedMenuItem, subDomain }) {
             onMenuSelection(item);
           }}
           defaultSelectedKeys={selectedMenuItem}
-          defaultOpenKeys={selectedMenuItem}
+          // defaultOpenKeys={selectedMenuItem}
           items={menuItems}
+          style={{ border: 0 }}
         />
       </Sider>
 

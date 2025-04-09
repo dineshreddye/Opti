@@ -60,22 +60,28 @@ function Dashboard({ allData, selectedOptions, subDomain }) {
       }
     };
 
-    const [party, feed, partner] = _tail(selectedOptions);
-    const partnerValue = partner.split("_")[2];
-    const feedValue = feed.split("_")[1];
+    const [_, party, feed, partner] = selectedOptions;
     let filteredDataByFeedAndPartner = allData;
-    filteredDataByFeedAndPartner = _filter(
-      filteredDataByFeedAndPartner,
-      (dataFeed) => dataFeed.party === party,
-    );
-    filteredDataByFeedAndPartner = _filter(
-      filteredDataByFeedAndPartner,
-      (dataFeed) => dataFeed.feed === feedValue,
-    );
-    filteredDataByFeedAndPartner = _filter(
-      filteredDataByFeedAndPartner,
-      (dataPartner) => dataPartner.partner === partnerValue,
-    );
+    if (party) {
+      filteredDataByFeedAndPartner = _filter(
+        filteredDataByFeedAndPartner,
+        (dataFeed) => dataFeed.party === party,
+      );
+    }
+    if (feed) {
+      const feedValue = feed.split("_")[1];
+      filteredDataByFeedAndPartner = _filter(
+        filteredDataByFeedAndPartner,
+        (dataFeed) => dataFeed.feed === feedValue,
+      );
+    }
+    if (partner) {
+      const partnerValue = partner.split("_")[2];
+      filteredDataByFeedAndPartner = _filter(
+        filteredDataByFeedAndPartner,
+        (dataPartner) => dataPartner.partner === partnerValue,
+      );
+    }
 
     if (selectedOption !== "custom") {
       const [startDate, endDate] = getDateRange(selectedOption);

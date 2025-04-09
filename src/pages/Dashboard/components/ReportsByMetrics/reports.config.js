@@ -2,10 +2,12 @@ import { CAMPAIGN_KEYS } from "../../../../constants/common";
 import { getValuesByKey, sumByKey } from "../../../../utils/common.utils";
 
 export function getReportsConfig(metrics) {
+  const amountSpent = sumByKey(metrics, CAMPAIGN_KEYS.AMOUNT_SPENT);
+  const net = sumByKey(metrics, CAMPAIGN_KEYS.NET);
   return [
     {
       title: "Amount Spent",
-      value: sumByKey(metrics, CAMPAIGN_KEYS.AMOUNT_SPENT),
+      value: amountSpent,
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.AMOUNT_SPENT),
       dotColor: "#f1bf48",
     },
@@ -17,13 +19,15 @@ export function getReportsConfig(metrics) {
     // },
     {
       title: "NET",
-      value: sumByKey(metrics, CAMPAIGN_KEYS.NET),
+      value: net,
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.NET),
       dotColor: "#5893e1",
     },
     {
       title: "ROI",
-      value: sumByKey(metrics, CAMPAIGN_KEYS.ROI),
+      value: Number.isNaN((net / amountSpent) * 100)
+        ? 0
+        : (net / amountSpent) * 100,
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.ROI),
       dotColor: "#de8085",
     },

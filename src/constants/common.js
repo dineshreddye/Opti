@@ -16,7 +16,7 @@ export const CAMPAIGN_KEYS = {
   CAMPAIGN_NAME: "campaignName",
   ADSET: "adSet",
   ADNAME: "adName",
-  TRAFFIC_SOURCE: "trafficeSource",
+  TRAFFIC_SOURCE: "trafficSource",
   STATUS: "status",
   ADACCOUNT: "adAccount",
   BUDGET: "budget",
@@ -47,12 +47,14 @@ export const PARTY_KEYS = {
   ADCORE: "adcore",
   M4M: "m4m",
   MW: "mw",
+  MEDIA3: "media3",
 };
 
 export const PARTY_LABELS = {
   [PARTY_KEYS.ADCORE]: "Ad Core",
   [PARTY_KEYS.M4M]: "M4M",
   [PARTY_KEYS.MW]: "MW",
+  [PARTY_KEYS.MEDIA3]: "Media3",
 };
 
 export const PARTY_OPTIONS = [
@@ -67,6 +69,10 @@ export const PARTY_OPTIONS = [
   {
     key: PARTY_KEYS.MW,
     label: PARTY_LABELS[PARTY_KEYS.MW],
+  },
+  {
+    key: PARTY_KEYS.MEDIA3,
+    label: PARTY_LABELS[PARTY_KEYS.MEDIA3],
   },
 ];
 

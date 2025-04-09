@@ -10,6 +10,7 @@ const columns = [
     title: "Name",
     dataIndex: "campaignName",
     key: "campaignName",
+    sorter: (a, b) => a.campaignName.localeCompare(b.campaignName),
   },
   {
     title: "Results",
@@ -69,7 +70,7 @@ function CampaignsTable({ data, openCreateCampaignModal, subDomain }) {
         key: "toggle",
         render: (_, record) => (
           <Switch
-            checked={record.toggle}
+            checked={record.status === "Active"}
             onChange={() => handleToggle(record.key)}
           />
         ),
@@ -77,7 +78,7 @@ function CampaignsTable({ data, openCreateCampaignModal, subDomain }) {
       {
         title: "Status",
         key: "Status",
-        render: (_, record) => <Status status={record.Status} />,
+        render: (_, record) => <Status isActive={record.status === "Active"} />,
       },
       ...columns,
     ],
