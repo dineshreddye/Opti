@@ -7,7 +7,7 @@ export function getReportsConfig(metrics) {
   return [
     {
       title: "Amount Spent",
-      value: amountSpent,
+      value: `$${amountSpent}`,
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.AMOUNT_SPENT),
       dotColor: "#f1bf48",
     },
@@ -19,7 +19,7 @@ export function getReportsConfig(metrics) {
     // },
     {
       title: "NET",
-      value: net,
+      value: net.toFixed(2),
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.NET),
       dotColor: "#5893e1",
     },
@@ -27,19 +27,19 @@ export function getReportsConfig(metrics) {
       title: "ROI",
       value: Number.isNaN((net / amountSpent) * 100)
         ? 0
-        : (net / amountSpent) * 100,
+        : `${((net / amountSpent) * 100).toFixed(2)}%`,
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.ROI),
       dotColor: "#de8085",
     },
     {
       title: "Link Clicks",
-      value: sumByKey(metrics, CAMPAIGN_KEYS.LINK_CLICKS),
+      value: Math.floor(sumByKey(metrics, CAMPAIGN_KEYS.LINK_CLICKS)),
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.LINK_CLICKS),
       dotColor: "#f1bf48",
     },
     {
       title: "Conversions",
-      value: sumByKey(metrics, CAMPAIGN_KEYS.CONVERSIONS),
+      value: Math.floor(sumByKey(metrics, CAMPAIGN_KEYS.CONVERSIONS)),
       graphValues: getValuesByKey(metrics, CAMPAIGN_KEYS.CONVERSIONS),
       dotColor: "#7a45ff",
     },

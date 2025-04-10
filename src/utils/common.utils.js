@@ -100,7 +100,17 @@ export function groupAndSortWithSumByKeyName(data, keyName) {
     })
     .sort((a, b) => b.count - a.count);
 
-  return sortedGroups;
+  console.log({ sortedGroups });
+
+  return sortedGroups.map((group) => ({
+    ...group,
+    roi:
+      !group?.net ||
+      !group?.amountSpent ||
+      Number.isNaN((group.net / group.amountSpent) * 100)
+        ? 0
+        : `${((group.net / group.amountSpent) * 100).toFixed(2)}%`,
+  }));
 }
 
 /**

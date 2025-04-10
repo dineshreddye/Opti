@@ -16,31 +16,37 @@ const columns = [
     title: "Results",
     dataIndex: "results",
     key: "results",
+    sorter: (a, b) => a.results - b.results,
   },
   {
     title: "Impressions",
     dataIndex: "impressions",
     key: "impressions",
+    sorter: (a, b) => a.results - b.results,
   },
   {
     title: "Amount Spent",
     dataIndex: "amountSpent",
     key: "amountSpent",
+    sorter: (a, b) => a.results - b.results,
   },
   {
     title: "Link Clicks",
     dataIndex: "linkClicks",
     key: "linkClicks",
+    sorter: (a, b) => a.results - b.results,
   },
   {
     title: "Net",
     dataIndex: "net",
     key: "net",
+    sorter: (a, b) => a.results - b.results,
   },
   {
     title: "Conversions",
     dataIndex: "conversions",
     key: "conversions",
+    sorter: (a, b) => a.results - b.results,
   },
 ];
 

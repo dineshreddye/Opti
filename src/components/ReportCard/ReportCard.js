@@ -30,7 +30,7 @@ function ReportCard({
       </div>
 
       {/* Value Display */}
-      <Text className="revenue-card-value">{value.toFixed(2)}</Text>
+      <Text className="revenue-card-value">{value}</Text>
 
       {/* Line Chart */}
       <div className="revenue-card-chart">

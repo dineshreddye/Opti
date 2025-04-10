@@ -21,30 +21,36 @@ function Campaigns({ campaigns, openCreateCampaignModal }) {
         partner = "",
       } = filters;
       const {
-        trafficeSource: source,
+        trafficSource: source,
         adAccount,
         date,
         feed: campaignFeed,
         partner: campaignPartner,
       } = campaign;
+
+      // console.log(filters, campaign);
       if (trafficSource) {
-        if (source.toLowerCase() !== trafficSource.toLowerCase()) {
+        if (!source) return false;
+        if (source?.toLowerCase() !== trafficSource?.toLowerCase()) {
           return false;
         }
       }
 
       if (account) {
-        if (adAccount.toLowerCase() !== account.toLowerCase()) {
+        if (!adAccount) return false;
+        if (adAccount?.toLowerCase() !== account?.toLowerCase()) {
           return false;
         }
       }
       if (feed) {
-        if (campaignFeed.toLowerCase() !== feed.toLowerCase()) {
+        if (!campaignFeed) return false;
+        if (campaignFeed?.toLowerCase() !== feed?.toLowerCase()) {
           return false;
         }
       }
       if (partner) {
-        if (campaignPartner.toLowerCase() !== partner.toLowerCase()) {
+        if (!campaignPartner) return false;
+        if (campaignPartner?.toLowerCase() !== partner?.toLowerCase()) {
           return false;
         }
       }

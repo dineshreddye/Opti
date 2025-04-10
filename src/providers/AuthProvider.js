@@ -45,11 +45,11 @@ function AuthProvider({ children }) {
   };
 
   const canUserSignIn = (userInfo) => {
-    // return true;
-    if (!_get(userInfo, "party")) {
-      return _get(userInfo, "isAdmin");
-    }
-    return getSubdomain() === _get(userInfo, "party");
+    return true;
+    // if (!_get(userInfo, "party")) {
+    //   return _get(userInfo, "isAdmin");
+    // }
+    // return getSubdomain() === _get(userInfo, "party");
   };
 
   useEffect(() => {
